@@ -12,6 +12,9 @@ dotenv.config({});
 
 const app = express();
 
+
+
+
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,4 +37,17 @@ app.use("/api/v1/application", applicationRoute);
 app.listen(PORT, () => {
   connectDB();
   console.log(`Server running at port ${PORT}`);
+});
+
+
+app.use(express.static("dist"));
+// Set MIME type for JavaScript files
+app.get("*.js", (req, res, next) => {
+  res.type("application/javascript");
+  next();
+});
+
+// Catch-all route
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
